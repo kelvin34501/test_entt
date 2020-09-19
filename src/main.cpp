@@ -2,6 +2,7 @@
 #include <memory>
 #include <exception>
 #include <utility>
+#include <execution>
 
 #include <entt/entt.hpp>
 
@@ -40,6 +41,16 @@ void update(std::uint64_t dt, entt::registry &registry) {
                 pos.y += vel.dy * dt;
             }
     );
+//    auto view = registry.view<Position, Velocity>();
+//    std::for_each(
+//            std::execution::par, view.begin(), view.end(),
+//            [&view, dt](const auto entity) {
+//                auto &pos = view.get<Position>(entity);
+//                const auto &vel = view.get<Velocity>(entity);
+//                pos.x += vel.dx * dt;
+//                pos.y += vel.dy * dt;
+//            }
+//    );
 }
 
 void show_position(entt::registry &registry) {
@@ -56,7 +67,7 @@ int main(int argn, char *argv[]) {
     entt::registry registry;
     std::uint64_t dt = 16;
 
-    for (auto i = 0; i < 10; ++i) {
+    for (auto i = 0; i < 100000000; ++i) {
         auto entity = registry.create();
         registry.emplace<Position>(entity, i * 1.0f, i * 1.0f);
         if (i % 2 == 0) {
@@ -66,12 +77,12 @@ int main(int argn, char *argv[]) {
         }
     }
 
-    show_position(registry);
+//    show_position(registry);
     std::cout << "=== split ===\n";
-    update(dt, registry);
+    for (auto i = 0; i < 32; ++i) {
+        update(dt, registry);
+    }
     update(registry);
-    show_position(registry);
-
-
+//    show_position(registry);
     return 0;
 }

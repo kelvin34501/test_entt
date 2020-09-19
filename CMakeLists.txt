@@ -24,10 +24,15 @@ set(TCLAP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/tclap/include)
 add_subdirectory(${CMAKE_SOURCE_DIR}/external/entt)
 set(ENTT_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/external/entt/src)
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/external/tbb)
+
 add_executable(test_entt src/main.cpp)
 target_compile_features(test_entt PRIVATE
     cxx_std_17
 )
 target_include_directories(test_entt PRIVATE
     ${ENTT_INCLUDE_DIR}
+)
+target_link_libraries(test_entt PRIVATE
+    tbb
 )
